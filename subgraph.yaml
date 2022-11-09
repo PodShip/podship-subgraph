@@ -1,0 +1,68 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: PodShipAuction
+    network: mumbai
+    source:
+      address: "0xFdc217E2867717ca21A5Edc13Fb8feA73192292D"
+      abi: PodShipAuction
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - AuctionCancelled
+        - AuctionCreated
+        - AuctionResulted
+        - BidPlaced
+        - BidRefunded
+        - OwnershipTransferred
+        - PlatformFeeChanged
+        - PlatformFeeRecipientChanged
+        - PodShipContractDeployed
+        - ProdcastCreated
+        - RecentWinner
+        - RequestedWinner
+        - Tipping
+        - Transfer
+      abis:
+        - name: PodShipAuction
+          file: ./abis/PodShipAuction.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: AuctionCancelled(indexed uint256)
+          handler: handleAuctionCancelled
+        - event: AuctionCreated(indexed uint256,indexed uint256,indexed uint96,uint256,uint256)
+          handler: handleAuctionCreated
+        - event: AuctionResulted(indexed uint256,indexed address,uint256)
+          handler: handleAuctionResulted
+        - event: BidPlaced(indexed uint256,indexed address,indexed uint256)
+          handler: handleBidPlaced
+        - event: BidRefunded(indexed uint256,indexed address,uint256)
+          handler: handleBidRefunded
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: PlatformFeeChanged(indexed uint256)
+          handler: handlePlatformFeeChanged
+        - event: PlatformFeeRecipientChanged(indexed address)
+          handler: handlePlatformFeeRecipientChanged
+        - event: PodShipContractDeployed()
+          handler: handlePodShipContractDeployed
+        - event: ProdcastCreated(indexed string,indexed address,indexed uint256)
+          handler: handleProdcastCreated
+        - event: RecentWinner(indexed address)
+          handler: handleRecentWinner
+        - event: RequestedWinner(indexed uint256)
+          handler: handleRequestedWinner
+        - event: Tipping(indexed uint256,indexed uint256,indexed address)
+          handler: handleTipping
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/pod-ship-auction.ts
