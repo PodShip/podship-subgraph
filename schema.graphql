@@ -1,6 +1,6 @@
 type PodSale @entity {
   id: ID!
-  podcast: Podcast!
+  podcast: Podcast
   # isOnSale: Boolean #set isOnsale = true when OfferCreated, AuctionCreated is emitted, and isOnSale = false when OfferCancelled, OfferPurchased, AuctionCancelled, AuctionPurchased, AuctionResulted is called
   amount: BigInt #can be reserved_price for auction or price for fixed
   isOnSale: Boolean
@@ -14,18 +14,18 @@ type PodSale @entity {
 
 type Podcast @entity {
   id: ID!
-  podcastId: ID!
-  metadataURI: String!
-  baseURI: String!
+  podcastId: ID
+  metadataURI: String
+  baseURI: String
   isOnSale: Boolean
-  created: BigInt!
-  ownerAddress: User!
-  creator: User!
+  created: BigInt
+  ownerAddress: User
+  creator: User
 }
 
 type User @entity{
   id: ID!
-  podcasts: [Podcast!]! @derivedFrom(field: "ownerAddress")
-  created: [Podcast!]! @derivedFrom(field: "creator")
+  podcasts: [Podcast!] @derivedFrom(field: "ownerAddress")
+  created: [Podcast!] @derivedFrom(field: "creator")
 }
 
