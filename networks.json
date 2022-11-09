@@ -2,6 +2,9 @@
   "mumbai": {
     "PodShipAuction": {
       "address": "0xFdc217E2867717ca21A5Edc13Fb8feA73192292D"
+    },
+    "PodShipSupporterNFT": {
+      "address": "0x0E2a4F18CEBE45f863ff8Dc7381B812295a02397"
     }
   }
 }
