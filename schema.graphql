@@ -1,4 +1,4 @@
-type PodAuction @entity {
+type PodSale @entity {
   id: ID!
   podcast: Podcast!
   # isOnSale: Boolean #set isOnsale = true when OfferCreated, AuctionCreated is emitted, and isOnSale = false when OfferCancelled, OfferPurchased, AuctionCancelled, AuctionPurchased, AuctionResulted is called

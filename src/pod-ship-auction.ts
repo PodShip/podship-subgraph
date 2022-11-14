@@ -103,6 +103,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   let podSale = new PodSale(event.address.toHex() + "-" + event.params.auctionId.toString())
   podSale.podcast = event.params.podcastId.toHex()
   podSale.amount = event.params.reservePrice
+  podSale.isOnSale = true
   podSale.duration = event.params.duration
   podSale.seller = event.transaction.from.toHex()
   podSale.save()
@@ -170,7 +171,6 @@ export function handleTransfer(event: Transfer): void {
     let auctionContract = PodShipAuction.bind(event.address)
     podcast.metadataURI = auctionContract.tokenURI(event.params.tokenId)
     podcast.baseURI = ""
-    podcast.isOnSale = true
     podcast.creator = event.params.to.toHex()
     podcast.ownerAddress = event.params.to.toHex()
     podcast.created = event.block.timestamp
