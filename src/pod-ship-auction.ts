@@ -92,34 +92,20 @@ export function handleApproval(event: Approval): void {
 export function handleApprovalForAll(event: ApprovalForAll): void {}
 
 export function handleAuctionCancelled(event: AuctionCancelled): void {
-  let podSale = PodSale.load(event.params.auctionId.toHex())
-  if(!podSale){
-    podSale = new PodSale(event.params.auctionId.toHex())
+  let podSale = PodSale.load(event.address.toHex() + "-" + event.params.auctionId.toString())
+  if(podSale){
     podSale.isOnSale = false
     podSale.save()
   }
 }
 
 export function handleAuctionCreated(event: AuctionCreated): void {
-  let podSale = new PodSale(event.params.auctionId.toHex())
-  podSale.podcastId = event.params.podcastId.toHex()
-  podSale.isOnSale = true
+  let podSale = new PodSale(event.address.toHex() + "-" + event.params.auctionId.toString())
+  podSale.podcast = event.params.podcastId.toHex()
   podSale.amount = event.params.reservePrice
   podSale.duration = event.params.duration
   podSale.seller = event.transaction.from.toHex()
   podSale.save()
-
-  let podcast  = Podcast.load(event.params.podcastId.toHex())
-  if (!podcast) {
-    podcast = new Podcast(event.params.podcastId.toHex())
-      
-    let auctionContract = PodShipAuction.bind(event.address)
-    podcast.metadataURI = auctionContract.tokenURI(event.params.podcastId)
-    podcast.baseURI = ""
-    podcast.isOnSale = true
-    podcast.created = event.block.timestamp
-    podcast.save()
-  }
 
   let user  = User.load(event.transaction.from.toHex())
   if (!user) {
@@ -129,18 +115,25 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 }
 
 export function handleAuctionResulted(event: AuctionResulted): void {
-  let podcast  = Podcast.load(event.params.winner.toHex())
-  if (!podcast) {
-    podcast = new Podcast(event.params.winner.toHex())
-    podcast.isOnSale = false
+  let podSale = PodSale.load(event.address.toHex() + "-" + event.params.auctionId.toString())
+  if(podSale){
+    podSale.isOnSale = false
+    podSale.save()
+  }
+
+  let auctionContract = PodShipAuction.bind(event.address)
+  let podcastId = auctionContract.auctions(event.params.auctionId).getPodcastId()
+
+  let podcast  = Podcast.load(podcastId.toHex())
+  if (podcast) {
+    podcast.ownerAddress = event.params.winner.toHex()
     podcast.save()
   }
 }
 
 export function handleBidPlaced(event: BidPlaced): void {
-  let podSale = PodSale.load(event.params.auctionId.toHex())
-  if(!podSale){
-    podSale = new PodSale(event.params.auctionId.toHex())
+  let podSale = PodSale.load(event.address.toHex() + "-" + event.params.auctionId.toString())
+  if(podSale){
     podSale.amount = event.params.bid
     podSale.save()
   }
@@ -182,6 +175,10 @@ export function handleTransfer(event: Transfer): void {
     podcast.ownerAddress = event.params.to.toHex()
     podcast.created = event.block.timestamp
     podcast.save()
+  }
+
+  if(podcast){
+    podcast.ownerAddress = event.params.to.toHex()
   }
 
   let user  = User.load(event.transaction.from.toHex())
