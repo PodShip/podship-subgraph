@@ -6,7 +6,7 @@ dataSources:
     name: PodShipAuction
     network: mumbai
     source:
-      address: "0xFdc217E2867717ca21A5Edc13Fb8feA73192292D"
+      address: "0x981B5Ad183DE724a1593dd0237f45F51B5bfab97"
       abi: PodShipAuction
       startBlock: 29008793
     mapping:
