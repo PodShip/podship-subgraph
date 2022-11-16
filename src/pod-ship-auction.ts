@@ -18,7 +18,7 @@ import {
   Tipping,
   Transfer
 } from "../generated/PodShipAuction/PodShipAuction"
-import { Bid, Podcast, PodSale, User } from "../generated/schema"
+import { Bid, Podcast, PodSale, Tip, User } from "../generated/schema"
 
 export function handleApproval(event: Approval): void {
 //   // Entities can be loaded from the store using a string ID; this ID
@@ -172,11 +172,50 @@ export function handlePodShipContractDeployed(
 
 export function handleProdcastCreated(event: ProdcastCreated): void {}
 
-export function handleRecentWinner(event: RecentWinner): void {}
+export function handleRecentWinner(event: RecentWinner): void {
+  let user  = User.load(event.transaction.from.toHexString())
+  if (!user) {
+    user = new User(event.transaction.from.toHexString())
+    user.isRecentWinner = true
+    user.save()
+  }
 
-export function handleRequestedWinner(event: RequestedWinner): void {}
+  if(user){
+    user.isRecentWinner = true
+    user.save()
+  }
+}
 
-export function handleTipping(event: Tipping): void {}
+export function handleRequestedWinner(event: RequestedWinner): void {
+  // let user  = User.load(event.transaction.from.toHexString())
+  // if (!user) {
+  //   user = new User(event.transaction.from.toHexString())
+  //   user.isRecentWinner = true
+  //   user.save()
+  // }
+
+  // if(user){
+  //   user.isRecentWinner = true
+  //   user.save()
+  // }
+}
+
+export function handleTipping(event: Tipping): void {
+
+  let tip = new Tip(event.address.toHex() + '-' + event.params.podcastId.toString())
+  tip.tip = event.params.tip
+  tip.supporter = event.transaction.from.toHexString()
+  tip.podcast = event.params.podcastId.toHex()
+  tip.save()
+
+  let user  = User.load(event.transaction.from.toHexString())
+
+  if (!user) {
+    user = new User(event.transaction.from.toHexString())
+    user.save()
+  }
+
+}
 
 export function handleTransfer(event: Transfer): void {
 

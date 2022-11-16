@@ -1,34 +1,56 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
-  PodShipSupporterNFTApprovalForAll,
+  ApprovalForAll,
+  OwnershipTransferred,
   TransferBatch,
   TransferSingle,
   URI
 } from "../generated/PodShipSupporterNFT/PodShipSupporterNFT"
 
-export function createPodShipSupporterNFTApprovalForAllEvent(
+export function createApprovalForAllEvent(
   account: Address,
   operator: Address,
   approved: boolean
-): PodShipSupporterNFTApprovalForAll {
-  let podShipSupporterNftApprovalForAllEvent = changetype<
-    PodShipSupporterNFTApprovalForAll
-  >(newMockEvent())
+): ApprovalForAll {
+  let approvalForAllEvent = changetype<ApprovalForAll>(newMockEvent())
 
-  podShipSupporterNftApprovalForAllEvent.parameters = new Array()
+  approvalForAllEvent.parameters = new Array()
 
-  podShipSupporterNftApprovalForAllEvent.parameters.push(
+  approvalForAllEvent.parameters.push(
     new ethereum.EventParam("account", ethereum.Value.fromAddress(account))
   )
-  podShipSupporterNftApprovalForAllEvent.parameters.push(
+  approvalForAllEvent.parameters.push(
     new ethereum.EventParam("operator", ethereum.Value.fromAddress(operator))
   )
-  podShipSupporterNftApprovalForAllEvent.parameters.push(
+  approvalForAllEvent.parameters.push(
     new ethereum.EventParam("approved", ethereum.Value.fromBoolean(approved))
   )
 
-  return podShipSupporterNftApprovalForAllEvent
+  return approvalForAllEvent
+}
+
+export function createOwnershipTransferredEvent(
+  previousOwner: Address,
+  newOwner: Address
+): OwnershipTransferred {
+  let ownershipTransferredEvent = changetype<OwnershipTransferred>(
+    newMockEvent()
+  )
+
+  ownershipTransferredEvent.parameters = new Array()
+
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam(
+      "previousOwner",
+      ethereum.Value.fromAddress(previousOwner)
+    )
+  )
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam("newOwner", ethereum.Value.fromAddress(newOwner))
+  )
+
+  return ownershipTransferredEvent
 }
 
 export function createTransferBatchEvent(

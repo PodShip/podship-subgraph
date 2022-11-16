@@ -21,11 +21,29 @@ type Podcast @entity {
   creator: User
 }
 
+type SupporterNFT @entity{
+  id: ID!
+  metadataURI: String
+  created: BigInt
+  ownerAddress: User
+  creator: User
+}
+
 type User @entity{
   id: ID!
   podcasts: [Podcast!] @derivedFrom(field: "ownerAddress")
+  isRecentWinner: Boolean
+  SupporterNFTs: [SupporterNFT!] @derivedFrom(field: "ownerAddress")
   created: [Podcast!] @derivedFrom(field: "creator")
   bids: [Bid!] @derivedFrom(field: "bidder")
+  tips: [Tip!] @derivedFrom(field: "supporter")
+}
+
+type Tip @entity{
+  id: ID!
+  tip: BigInt
+  supporter: User
+  podcast: Podcast
 }
 
 
@@ -36,3 +54,41 @@ type Bid @entity{
   adrr: String
   bid: BigInt
 }
+
+
+# type ApprovalForAll @entity {
+#   id: ID!
+#   account: Bytes! # address
+#   operator: Bytes! # address
+#   approved: Boolean! # bool
+# }
+
+# type OwnershipTransferred @entity {
+#   id: ID!
+#   previousOwner: Bytes! # address
+#   newOwner: Bytes! # address
+# }
+
+# type TransferBatch @entity {
+#   id: ID!
+#   operator: Bytes! # address
+#   from: Bytes! # address
+#   to: Bytes! # address
+#   ids: [BigInt]! # uint256[]
+#   values: [BigInt]! # uint256[]
+# }
+
+# type TransferSingle @entity {
+#   id: ID!
+#   operator: Bytes! # address
+#   from: Bytes! # address
+#   to: Bytes! # address
+#   id: BigInt! # uint256
+#   value: BigInt! # uint256
+# }
+
+# type URI @entity {
+#   id: ID!
+#   value: String! # string
+#   id: BigInt! # uint256
+# }
