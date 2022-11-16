@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x981B5Ad183DE724a1593dd0237f45F51B5bfab97"
       abi: PodShipAuction
-      startBlock: 29008793
+      startBlock: 29165261
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
