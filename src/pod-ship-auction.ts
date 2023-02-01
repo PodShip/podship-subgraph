@@ -204,7 +204,6 @@ export function handleTipping(event: Tipping): void {
 
   let tip = new Tip(event.address.toHex() + '-' + event.params.podcastId.toString())
   tip.tip = event.params.tip
-  tip.supporter = event.transaction.from.toHexString()
   tip.podcast = event.params.podcastId.toHex()
   tip.save()
 

@@ -21,28 +21,19 @@ type Podcast @entity {
   creator: User
 }
 
-type SupporterNFT @entity{
-  id: ID!
-  metadataURI: String
-  created: BigInt
-  ownerAddress: User
-  creator: User
-}
+
 
 type User @entity{
   id: ID!
   podcasts: [Podcast!] @derivedFrom(field: "ownerAddress")
   isRecentWinner: Boolean
-  SupporterNFTs: [SupporterNFT!] @derivedFrom(field: "ownerAddress")
   created: [Podcast!] @derivedFrom(field: "creator")
   bids: [Bid!] @derivedFrom(field: "bidder")
-  tips: [Tip!] @derivedFrom(field: "supporter")
 }
 
 type Tip @entity{
   id: ID!
   tip: BigInt
-  supporter: User
   podcast: Podcast
 }
 
